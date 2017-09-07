@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Document</title>
+</head>
+<body>
+	<div id="app">
+		<form>
+			<input v-model="username" placeholder="请填写用户名" type="text">
+			<p>UserName is : {{ username }}</p>
+			<input v-model="password" placeholder="请填写密码" type="password">
+			<p>Password is : {{ password }}</p>
+			<textarea v-model="message"></textarea>
+			<select v-model="selected">
+			  <option v-for="option in options" v-bind:value="option.value">
+			    {{ option.text }}
+			  </option>
+			</select>
+			<span>Selected: {{ selected }}</span>
+		</form>
+	</div>
+	
+</body>
+</html>
+<script type="text/javascript" src="vue.js"></script>
+<script type="text/javascript">
+	var vm = new Vue({
+		el : "#app",
+		data : {
+			username : '',
+			password : '',
+			message : 'vue是一个不错的前端js类库',
+			selected: 'a',
+		    options: [
+		      { text: 'one', value: 'a' },
+		      { text: 'two', value: 'b' },
+		      { text: 'three', value: 'c' }
+		    ]
+		}
+	})
+</script>
+
+

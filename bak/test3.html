@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta http-equiv="content-type" content="text/html;charset=utf-8">
+	<title>Document</title>
+	<style>
+		.noActive {
+			display: none;
+		}
+		.active {
+			display: block;
+		}
+	</style>
+</head>
+<body>
+	<div id="app">
+		<div v-bind:class="{ noActive: isActive, active:isActive>5 }">{{hahah}}</div>
+
+		<div v-bind:style="{ color: activeColor, fontSize: fontSize + 'px' }">你动动我试试</div>
+
+		<h1 v-if="ok">Yes</h1>
+		<h1 v-else>No</h1>
+
+		<div v-if="Math.random() > 0.5">
+		  Now you see me
+		</div>
+		<div v-else>
+		  Now you don't
+		</div>
+
+		<template v-if="loginType === 'username'">
+		  <label>Username</label>
+		  <input placeholder="Enter your username">
+		</template>
+		<template v-else>
+		  <label>Email</label>
+		  <input placeholder="Enter your email address">
+		</template>
+		<input type="button" @click="toggole" value="toggole">
+
+		<template v-if="loginType === 'username'">
+		  <label>Username</label>
+		  <input placeholder="Enter your username" key="username-input">
+		</template>
+		<template v-else>
+		  <label>Email</label>
+		  <input placeholder="Enter your email address" key="email-input">
+		</template>
+
+		<br/>
+
+		<ul id="example-1">
+		  <li v-for="item in items">
+		    {{ item.message }}
+		  </li>
+		</ul>
+	</div>
+
+	<div id="todo-list-example">
+		<input
+			v-model="newTodoText"
+			v-on:keyup.enter="addNewTodo"
+			placeholder="Add a todo"
+		>
+		<ul>
+			<li
+			  is="todo-item"
+			  v-for="(todo, index) in todos"
+			  v-bind:title="todo"
+			  v-on:remove="todos.splice(index, 1)"
+			></li>
+		</ul>
+	</div>
+	<div id="testMath">
+		<li v-for="n in evenNumbers">{{ n }}</li>
+		
+		<li v-for="n in even(numbers)">{{ n }}</li>
+		
+		<form action="/">
+			<input type="text">
+			<button v-on:click="warn('Form cannot be submitted yet.', $event)">Submit</button>	
+		</form>
+		
+
+	</div>
+</body>
+</html>
+<script type="text/javascript" src="vue.js"></script>
+<script type="text/javascript">
+	var vm = new Vue({
+		el : "#app",
+		data : {
+			isActive : 6,
+			hasError : false,
+			hahah : "hello vue!",
+			activeColor: 'red',
+  			fontSize: 30,
+  			ok : false,
+  			loginType : "aaa",
+  			items: [
+		      {message: 'Foo' },
+		      {message: 'Bar' }
+		    ]
+		},
+		methods : {
+			toggole : function () {
+				if (vm.loginType === "username") {
+					vm.loginType = "aaa"
+				} else {
+					vm.loginType = "username"	
+				}
+			}
+		}
+	});
+
+	//----------------------
+	var vm2 = Vue.component('todo-item', {
+	  template: '\
+	    <li>\
+	      {{ title }}\
+	      <button v-on:click="$emit(\'remove\')">X</button>\
+	    </li>\
+	  ',
+	  props: ['title']
+	});
+
+	var vm3 = new Vue({
+	  el: '#todo-list-example',
+	  data: {
+	    newTodoText: '',
+	    todos: [
+	      'Do the dishes',
+	      'Take out the trash',
+	      'Mow the lawn'
+	    ]
+	  },
+	  methods: {
+	    addNewTodo: function () {
+	      vm3.todos.push(vm3.newTodoText)
+	      vm3.newTodoText = ''
+	    }
+	  }
+	});
+
+
+	//----------------------------------
+	var vm4 = new Vue({
+		el : "#testMath",
+		data: {
+		  numbers: [ 1, 2, 3, 4, 5 ]
+		},
+		computed: {
+		  	evenNumbers: function () {
+			    return this.numbers.filter(function (number) {
+			      return number % 2 === 0
+			    })
+			}
+		},
+		methods : {
+			even: function (numbers) {
+			    return this.numbers.filter(function (number) {
+			      return number % 2 === 0
+			    })
+			},
+			warn : function (message, event){
+				if (event)
+					event.preventDefault()
+				alert(message); 
+			}
+		}
+	})
+
+</script>

@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>封装alert</title>
+	<link rel="stylesheet" type="text/css" href="font/iconfont.css">
+	<style type="text/css">
+		/*
+			基本样式	
+		*/
+		.jack-alert {
+			width: 100%;
+			padding: 8px 16px;
+			margin: 0;
+			box-sizing: border-box;
+			border-radius: 4px;
+			position: relative;
+			background-color: #fff; 
+			overflow: hidden;
+			color: #fff;
+			display: table;
+			transition: opacity .2s;
+			margin-top: 10px;
+			border: 1px solid #ccc;
+		}
+
+		.jack-content {
+			display: table-cell;
+			padding: 0 8px;
+		}
+
+		.jack-message {
+			font-size: 13px;
+			line-height: 18px;
+		}
+
+		/* 不同状态样式 */
+		.jack-alert-success {
+			background-color: #13ce66;
+		}
+		
+		.jack-alert-info, .jack-alert-message {
+			background-color: #50bfff;
+		}
+
+		.jack-alert-warning {
+			background-color: #f7ba2a;
+		}
+
+		.jack-alert-error {
+			background-color: #ff4949;
+		}
+
+		/* 关闭按钮样式 */
+		.jack-closebtn {
+			font-size: 12px;
+			color:#fff;
+			opacity: 1;
+			top: 12px;
+			right: 15px;
+			position: absolute;
+			cursor: pointer;
+		}
+
+
+		#app {
+			width: 500px;
+		}
+
+
+	</style>
+	<script src="./vue.js" ></script>
+</head>
+<body>
+	<div id="app">
+		<!-- 显示关闭按钮，显示提示图标 -->
+		<jack-alert type="error" title="错误啦！" 
+					:closeable="false" 
+					:show-icon="true" 
+					@close-click="closeHanele">
+		</jack-alert>
+
+		<!-- 没有指定closeable为false就不显示提示图标 -->
+		<jack-alert type="info" title="提示信息" :show-icon="true"></jack-alert>
+		
+		<jack-alert type="success" title="恭喜！成功啦！" :closeable="false"></jack-alert>
+		
+		<jack-alert type="warning" title="警告！！！"></jack-alert>
+		
+		<!-- 可以改变样式 -->
+		<jack-alert type="message" title="你有新消息！" 
+					style="background-color: pink; 
+					widht:500px;
+					height: 200px;"
+		>
+		</jack-alert>
+
+		<jack-alert>
+			<template slot="titleTmp">
+				<p>我是定制提醒信息</p>
+				<p>我是定制提醒信息</p>
+				<p>我是定制提醒信息</p>
+				<p>我是定制提醒信息</p>
+				<p>我是定制提醒信息</p>
+			</template>
+
+			<i slot="iconTmp" class="iconfont icon-jack-icon-error"></i>
+			<i slot="iconTmp" class="iconfont icon-jack-icon-warning"></i>
+			<i slot="iconTmp" class="iconfont icon-jack-icon-info"></i>
+			<i slot="iconTmp" class="iconfont icon-jack-icon-success"></i>
+		</jack-alert>
+	</div>
+
+	<script>
+
+		/*
+			alert 提醒框有四种状态：
+				info success error warning 
+
+			设置的props：
+				type 提醒框类型 默认为info
+				title 提示信息 '这里有一个消息要提示'
+				closeable 是否禁用关闭 默认为true
+				showIcon 是否显示图标 默认为false
+				style 设置提醒框样式，默认为{}
+			
+			定制模板：
+				slot为iconTmp		定制icon模板
+				slot为titleTmp  		定制提示信息结构
+
+			监控状态变化：
+				事件名close-click	点击关闭X触发
+		*/
+
+		Vue.component("jack-alert", {
+			props:{
+				type : {
+					type : String,
+					default: "error"
+				},
+				title : {
+					type : String,
+					default: "这有一个消息"
+				},
+				closeable: {
+					type : Boolean,
+					default: true
+				},
+				showIcon : {
+					type : Boolean,
+					default: false
+				},
+				style : String
+			},
+			computed: {
+				classes() {
+					return `jack-alert-${this.type}`
+				},
+				iconClass() {
+					return `icon-jack-icon-${this.type}`
+				}
+			},
+			template: `
+				<div class="jack-alert" :class="[classes]" style="style">
+					<slot name="iconTmp">
+						<i v-if="showIcon" class="iconfont" :class="[iconClass]"></i>
+					</slot>
+					<div class="jack-content">
+						<slot name="titleTmp">
+							<span class="jack-message">{{title}}</span>
+						</slot>	
+						<i v-if="!closeable" class="iconfont 
+							icon-jack-closebtn 
+							jack-closebtn"
+							@click="closeHandle"
+						></i>
+					</div>
+				</div>
+			`,
+			methods: {
+				closeHandle() {
+					this.$emit("close-click");
+				}
+			}
+		});
+
+		new Vue({
+			el: "#app",
+			methods:{
+				closeHanele : function(){
+					alert("关闭之后做一些事情");
+				}
+			}
+		});
+	</script>	
+</body>
+</html>

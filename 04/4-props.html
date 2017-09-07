@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>组件单向数据流 单向数据流1</title>
+	<style type="text/css">
+		
+	</style>
+	<script src="./vue.js" type="text/javascript"></script>
+</head>
+<body>
+	<div id="app">
+		<custon-component :count="count"></custon-component>	
+	</div>
+	<script>
+		Vue.component('custon-component', {
+			props: ['count'],
+			data() {
+				return {
+					incrementCount : this.count //作为局部这个组件的data的初始值
+				}
+			},
+			template : `
+				<div>
+					<h2>我是一个自定义组件</h2>
+					<input type="button" value="改变count的值" @click="changeCount">
+					{{incrementCount}}
+				</div>
+			`,
+			methods:{
+				changeCount() {
+					//this.count ++;  
+					//不能直接改变count这个父组件传过来的值
+					//通过incrementCount来改来data中的incrementCount来改变
+					this.incrementCount ++;  
+				}
+			}
+		});
+
+		new Vue({
+			el : "#app",
+			data : {
+				count : 0
+			}
+		});
+	</script>
+</body>
+</html>

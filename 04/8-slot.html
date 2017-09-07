@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>slot</title>
+	<style type="text/css">
+		
+	</style>
+	<script src="./vue.js" type="text/javascript"></script>
+</head>
+<body>
+	<div id="app">
+		<h2>自定义组件</h2>
+		<custom>
+			<!-- 当写在自定义标签之间的内容，作用：要混合子组件的模板 -->
+			<div>
+				我是html结构
+			</div>
+		</custom>
+	</div>
+	<script>
+
+		//定制模板
+		//如果没有在custom标签中添加元素，则会显示slot当中的内容
+		Vue.component("custom", {
+			template: `
+				<div>
+					<slot>
+						<p>这是第1个提醒</p>
+						<p>这是第2个提醒</p>
+						<p>这是第3个提醒</p>
+					</slot>
+
+				</div>
+			`
+		});
+
+		new Vue({
+			el : "#app"
+		});
+		
+	</script>
+</body>
+</html>
